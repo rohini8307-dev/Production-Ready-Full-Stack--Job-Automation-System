@@ -38,7 +38,6 @@ export default function Dashboard({ onOpenWizard, isProfileCompleted, scrapeVers
         if (mounted) setLoading(false);
       });
     } else {
-      // Reset to zero state when profile not completed
       setJobs([]);
       setOverview({
         resume_score: 0, ats_score: 0, active_recommendations: 0,
@@ -47,7 +46,7 @@ export default function Dashboard({ onOpenWizard, isProfileCompleted, scrapeVers
       });
     }
     return () => { mounted = false; };
-  }, [priorityTab, isProfileCompleted, scrapeVersion]); // Re-fetch on scrapeVersion bump
+  }, [priorityTab, isProfileCompleted, scrapeVersion]);
 
   const filteredJobs = priorityTab === "All"
     ? jobs
@@ -64,16 +63,25 @@ export default function Dashboard({ onOpenWizard, isProfileCompleted, scrapeVers
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <div className="lg:col-span-2 space-y-4">
           {/* Header & Priority Filter Bar */}
-          <div className="card-panel bg-[#151A24] border border-[#1E2533] rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div
+            className="card-panel p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border rounded-xl"
+            style={{ background: 'var(--bg-card)', borderColor: 'var(--border-main)' }}
+          >
             <div className="flex items-center gap-3">
               <PriorityTabs activeTab={priorityTab} setActiveTab={setPriorityTab} />
-              <span className="text-xs font-bold text-[#8A99AF] px-2.5 py-1 bg-[#0F131D] rounded-lg border border-[#1E2533]">
+              <span
+                className="text-xs font-bold px-2.5 py-1 rounded-lg border"
+                style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border-dim)', color: 'var(--text-secondary)' }}
+              >
                 {filteredJobs.length} Jobs Found
               </span>
             </div>
 
             <div className="flex items-center gap-2.5">
-              <select className="bg-[#0F131D] border border-[#1E2533] rounded-lg px-2.5 py-1.5 text-xs text-gray-300 focus:outline-none">
+              <select
+                className="rounded-lg px-2.5 py-1.5 text-xs focus:outline-none"
+                style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border-main)', color: 'var(--text-main)' }}
+              >
                 <option>Sort by: Shortlist Odds (High → Low)</option>
                 <option>Sort by: Posted Date (Newest first)</option>
                 <option>Sort by: Company Trust Score</option>
@@ -90,20 +98,26 @@ export default function Dashboard({ onOpenWizard, isProfileCompleted, scrapeVers
           {/* Job Card List / Zero State */}
           {loading ? (
             <div className="card-panel py-12 text-center">
-              <div className="w-6 h-6 border-2 border-t-transparent border-[#3B82F6] rounded-full animate-spin mx-auto mb-3" />
-              <div className="text-sm text-[#8A99AF]">Loading AI-matched recommendations...</div>
+              <div
+                className="w-6 h-6 border-2 border-t-transparent rounded-full animate-spin mx-auto mb-3"
+                style={{ borderColor: 'var(--gold-primary)', borderTopColor: 'transparent' }}
+              />
+              <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>Loading AI-matched recommendations...</div>
             </div>
           ) : !isProfileCompleted ? (
-            <div className="card-panel py-16 text-center space-y-4 border-2 border-dashed border-[#3B82F6]/40">
+            <div
+              className="card-panel py-16 text-center space-y-4 border-2 border-dashed rounded-xl"
+              style={{ borderColor: 'var(--border-gold)', background: 'var(--bg-card)' }}
+            >
               <div className="text-4xl">🧭</div>
-              <h3 className="text-base font-bold text-white">Profile Onboarding Required</h3>
-              <p className="text-xs text-[#8A99AF] max-w-md mx-auto leading-relaxed">
+              <h3 className="text-base font-bold" style={{ color: 'var(--text-main)' }}>Profile Onboarding Required</h3>
+              <p className="text-xs max-w-md mx-auto leading-relaxed" style={{ color: 'var(--text-dim)' }}>
                 No sample or test data is shown. Complete your profile with your Full Name, Email,
-                Location, Domain, Resume and Skills — then click <strong className="text-[#F59E0B]">⚡ Start New Scrape</strong> to begin Agent 1 Discovery.
+                Location, Domain, Resume and Skills — then click <strong style={{ color: 'var(--gold-bright)' }}>⚡ Start New Scrape</strong> to begin Agent 1 Discovery.
               </p>
               <button
                 onClick={onOpenWizard}
-                className="btn-primary text-xs px-5 py-2.5 shadow-lg shadow-blue-500/20"
+                className="btn-primary text-xs px-5 py-2.5 shadow-lg"
               >
                 🪄 Start Career Wizard & Setup Profile →
               </button>
@@ -111,12 +125,12 @@ export default function Dashboard({ onOpenWizard, isProfileCompleted, scrapeVers
           ) : filteredJobs.length === 0 ? (
             <div className="card-panel py-12 text-center space-y-3">
               <div className="text-3xl">⚡</div>
-              <div className="text-sm font-bold text-white">
+              <div className="text-sm font-bold" style={{ color: 'var(--text-main)' }}>
                 Profile Active — No Jobs Discovered Yet
               </div>
-              <p className="text-xs text-[#8A99AF]">
-                Click <strong className="text-[#F59E0B]">⚡ Start New Scrape</strong> in the topbar to
-                trigger Agent 1 Discovery for <strong className="text-white">{profileStore.primaryDomain || "your target domain"}</strong> positions.
+              <p className="text-xs" style={{ color: 'var(--text-dim)' }}>
+                Click <strong style={{ color: 'var(--gold-bright)' }}>⚡ Start New Scrape</strong> in the topbar to
+                trigger Agent 1 Discovery for <strong style={{ color: 'var(--text-main)' }}>{profileStore.primaryDomain || "your target domain"}</strong> positions.
               </p>
             </div>
           ) : (
@@ -130,15 +144,21 @@ export default function Dashboard({ onOpenWizard, isProfileCompleted, scrapeVers
         <div className="lg:col-span-1 space-y-4 sticky top-20">
           <ActivityFeed />
 
-          <div className="card-panel p-4 bg-gradient-to-br from-[#151A24] to-[#1E2533] border border-[#3B82F6]/30 rounded-xl">
-            <div className="flex items-center gap-2 text-[#3B82F6] font-extrabold text-sm mb-1.5">
+          <div
+            className="card-panel p-4 rounded-xl border"
+            style={{
+              background: 'linear-gradient(135deg, var(--bg-card), var(--bg-elevated))',
+              borderColor: 'var(--border-gold)'
+            }}
+          >
+            <div className="flex items-center gap-2 font-extrabold text-sm mb-1.5" style={{ color: 'var(--gold-bright)' }}>
               <span>🚀</span>
               <span>NOAH Copilot Pro-Tip</span>
             </div>
-            <p className="text-xs text-[#8A99AF] leading-relaxed">
-              Jobs categorized as <strong className="text-[#EF4444]">Priority 1</strong> have &gt;80%
+            <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              Jobs categorized as <strong style={{ color: 'var(--gold-bright)' }}>Priority 1</strong> have &gt;80%
               shortlist odds based on your ATS profile and employer responsiveness. Use{' '}
-              <strong>Auto Apply All</strong> to let Agent 4 submit customized resumes asynchronously.
+              <strong style={{ color: 'var(--text-main)' }}>Auto Apply All</strong> to let Agent 4 submit customized resumes asynchronously.
             </p>
           </div>
         </div>

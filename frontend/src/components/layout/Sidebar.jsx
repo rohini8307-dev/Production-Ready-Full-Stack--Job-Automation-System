@@ -5,34 +5,48 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     { id: 'dashboard', label: 'Dashboard', icon: '🏠' },
     { id: 'discover', label: 'Discover Jobs', icon: '🔍' },
     { id: 'recommendations', label: 'Recommendations', icon: '✨' },
-    { id: 'priority', label: 'Priority Jobs', icon: '⭐', badge: '12', badgeColor: 'bg-[#F59E0B] text-black font-bold' },
-    { id: 'bucketlist', label: 'Bucket List', icon: '🛍️', badge: '8', badgeColor: 'bg-[#8B5CF6] text-white font-bold' },
-    { id: 'applied', label: 'Applied Jobs', icon: '✈️', badge: '24', badgeColor: 'bg-[#10B981] text-black font-bold' },
+    { id: 'priority', label: 'Priority Jobs', icon: '⭐', badge: 'P1', badgeColor: 'bg-[#C8941F]/20 text-[#E8B84B] border border-[#C8941F]/40' },
+    { id: 'bucketlist', label: 'Bucket List', icon: '🛍️' },
+    { id: 'applied', label: 'Applied Jobs', icon: '✈️' },
     { id: 'applications', label: 'Application Tracker', icon: '📋', hasArrow: true },
     { id: 'profile', label: 'Resume & Profile', icon: '📄' },
     { id: 'analytics', label: 'Analytics', icon: '📊', hasArrow: true },
     { id: 'roadmap', label: 'Skill Gap & Roadmap', icon: '🗺️' },
-    { id: 'notifications', label: 'Notifications', icon: '🔔', badge: '5', badgeColor: 'bg-[#EF4444] text-white font-bold' },
+    { id: 'notifications', label: 'Notifications', icon: '🔔' },
     { id: 'settings', label: 'Settings', icon: '⚙️' },
   ];
 
   const agents = [
-    { name: 'Agent 1 Discovery', status: 'Running', color: 'bg-[#10B981]' },
-    { name: 'Agent 2 Intelligence', status: 'Running', color: 'bg-[#10B981]' },
-    { name: 'Agent 3 Student Intel', status: 'Idle', color: 'bg-[#F59E0B]' },
-    { name: 'Agent 4 Matching', status: 'Running', color: 'bg-[#10B981]' },
+    { name: 'Agent 1 Discovery', status: 'Active', color: 'bg-[#C8941F]' },
+    { name: 'Agent 2 Intelligence', status: 'Active', color: 'bg-[#C8941F]' },
+    { name: 'Agent 3 Student Intel', status: 'Ready', color: 'bg-[#9B6840]' },
+    { name: 'Agent 4 Matching', status: 'Active', color: 'bg-[#C8941F]' },
   ];
 
   return (
-    <aside className="w-64 bg-[#0F131D] border-r border-[#1E2533] flex flex-col justify-between p-4 flex-shrink-0 h-screen sticky top-0">
+    <aside
+      className="w-64 flex flex-col justify-between p-4 flex-shrink-0 h-screen sticky top-0 border-r"
+      style={{ background: 'var(--bg-sidebar)', borderColor: 'var(--border-main)' }}
+    >
       <div>
         <div className="flex items-center gap-3 mb-6 px-2">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#F59E0B] to-[#D97706] flex items-center justify-center text-[#0B0E14] font-black text-xl shadow-lg shadow-amber-500/20">
+          <div
+            className="w-9 h-9 rounded-lg flex items-center justify-center font-black text-xl shadow-lg"
+            style={{
+              background: 'linear-gradient(135deg, var(--gold-primary), var(--gold-deep))',
+              color: '#0F0804',
+              boxShadow: '0 4px 14px var(--gold-glow)'
+            }}
+          >
             ◈
           </div>
           <div>
-            <h1 className="font-extrabold text-lg tracking-wider text-white">NOAH</h1>
-            <p className="text-[10px] text-[#8A99AF] font-medium tracking-tight">NexusAI Platform</p>
+            <h1 className="font-extrabold text-lg tracking-wider text-gold-gradient" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+              NOAH NEXUS
+            </h1>
+            <p className="text-[10px] text-dim tracking-wider uppercase" style={{ color: 'var(--text-dim)' }}>
+              Career Intelligence
+            </p>
           </div>
         </div>
 
@@ -44,10 +58,11 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-                  isActive
-                    ? 'bg-[#1E293B] text-white border-l-4 border-[#3B82F6] pl-2 shadow-md'
-                    : 'text-[#8A99AF] hover:text-white hover:bg-[#151A24]'
+                  isActive ? 'sidebar-active' : 'hover:bg-[#1A0F08]'
                 }`}
+                style={{
+                  color: isActive ? 'var(--gold-bright)' : 'var(--text-secondary)'
+                }}
               >
                 <div className="flex items-center gap-2.5">
                   <span className="text-sm">{item.icon}</span>
@@ -55,11 +70,11 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                 </div>
                 <div className="flex items-center gap-1.5">
                   {item.badge && (
-                    <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${item.badgeColor}`}>
+                    <span className={`px-1.5 py-0.5 rounded text-[10px] ${item.badgeColor}`}>
                       {item.badge}
                     </span>
                   )}
-                  {item.hasArrow && <span className="text-[10px] text-[#5D6A80]">›</span>}
+                  {item.hasArrow && <span style={{ color: 'var(--text-dim)', fontSize: '10px' }}>›</span>}
                 </div>
               </button>
             );
@@ -67,17 +82,17 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         </nav>
       </div>
 
-      <div className="mt-4 pt-4 border-t border-[#1E2533]">
-        <div className="text-[11px] font-bold text-[#5D6A80] tracking-wider uppercase mb-2 px-2">
-          AGENT STATUS
+      <div className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--border-dim)' }}>
+        <div className="text-[11px] font-bold tracking-wider uppercase mb-2 px-2" style={{ color: 'var(--text-dim)' }}>
+          AGENT SYSTEM STATUS
         </div>
         <div className="space-y-2 mb-4 px-2">
           {agents.map((ag) => (
-            <div key={ag.name} className="flex items-center justify-between text-xs text-[#8A99AF]">
+            <div key={ag.name} className="flex items-center justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
               <span>{ag.name}</span>
               <div className="flex items-center gap-1.5">
                 <span className={`w-2 h-2 rounded-full ${ag.color} animate-pulse`} />
-                <span className={ag.status === 'Running' ? 'text-[#10B981] font-medium' : 'text-[#F59E0B] font-medium'}>
+                <span style={{ color: 'var(--text-gold)', fontWeight: 600 }}>
                   {ag.status}
                 </span>
               </div>
@@ -87,7 +102,12 @@ export default function Sidebar({ activeTab, setActiveTab }) {
 
         <button
           onClick={() => setActiveTab('analytics')}
-          className="w-full flex items-center justify-between px-3 py-2 bg-[#151A24] hover:bg-[#1C2230] rounded-lg text-xs font-medium text-[#8A99AF] hover:text-white transition border border-[#1E2533]"
+          className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition border"
+          style={{
+            background: 'var(--bg-card)',
+            borderColor: 'var(--border-main)',
+            color: 'var(--text-secondary)'
+          }}
         >
           <div className="flex items-center gap-2">
             <span>💻</span>

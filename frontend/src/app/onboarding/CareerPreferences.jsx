@@ -52,31 +52,31 @@ export default function CareerPreferences({ formData, setFormData, onNext, onPre
   return (
     <div className="space-y-5 text-xs max-h-[65vh] overflow-y-auto pr-2 custom-scrollbar">
       {/* Mandatory Work Mode & Location Section */}
-      <div className="p-4 bg-[#0F131D] border border-[#1E2533] rounded-xl space-y-3">
-        <h4 className="font-extrabold text-sm text-[#3B82F6] flex items-center gap-1.5">
+      <div className="p-4 rounded-xl border space-y-3" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border-main)' }}>
+        <h4 className="font-extrabold text-sm flex items-center gap-1.5" style={{ color: 'var(--gold-bright)' }}>
           <span>📍</span>
           <span>Location & Work Mode Preferences (Mandatory)</span>
         </h4>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block font-bold text-white mb-1">Current Location (City + State) *</label>
+            <label className="block font-bold mb-1" style={{ color: 'var(--text-main)' }}>Current Location (City + State) *</label>
             <input
               type="text"
               required
               value={formData.currentLocation}
               onChange={(e) => setFormData({ ...formData, currentLocation: e.target.value })}
               placeholder="e.g. Bangalore, Karnataka"
-              className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2.5 text-white focus:border-[#3B82F6]"
+              className="w-full rounded-lg p-2.5"
             />
           </div>
 
           <div>
-            <label className="block font-bold text-white mb-1">Preferred Work Mode *</label>
+            <label className="block font-bold mb-1" style={{ color: 'var(--text-main)' }}>Preferred Work Mode *</label>
             <select
               value={formData.workMode}
               onChange={(e) => setFormData({ ...formData, workMode: e.target.value })}
-              className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2.5 text-white focus:border-[#3B82F6]"
+              className="w-full rounded-lg p-2.5"
             >
               <option value="Remote">Remote</option>
               <option value="Hybrid">Hybrid</option>
@@ -86,8 +86,8 @@ export default function CareerPreferences({ formData, setFormData, onNext, onPre
         </div>
 
         {(formData.workMode === "Hybrid" || formData.workMode === "On-site") && (
-          <div className="mt-2 pt-2 border-t border-[#1E2533]">
-            <label className="block font-bold text-white mb-1">
+          <div className="mt-2 pt-2 border-t" style={{ borderColor: 'var(--border-dim)' }}>
+            <label className="block font-bold mb-1" style={{ color: 'var(--text-main)' }}>
               Preferred Location(s) for {formData.workMode} (Multiple allowed) *
             </label>
             <div className="flex flex-wrap gap-1.5 mb-2">
@@ -96,11 +96,12 @@ export default function CareerPreferences({ formData, setFormData, onNext, onPre
                   key={city}
                   type="button"
                   onClick={() => handleAddPreferredCity(city)}
-                  className={`px-2 py-1 rounded-md text-[11px] font-semibold border transition ${
-                    formData.preferredLocations.includes(city)
-                      ? "bg-[#3B82F6] text-white border-[#3B82F6]"
-                      : "bg-[#151A24] text-[#8A99AF] border-[#1E2533] hover:text-white"
-                  }`}
+                  className="px-2 py-1 rounded-md text-[11px] font-semibold border transition"
+                  style={{
+                    background: formData.preferredLocations.includes(city) ? 'var(--gold-primary)' : 'var(--bg-card)',
+                    color: formData.preferredLocations.includes(city) ? '#0F0804' : 'var(--text-secondary)',
+                    borderColor: 'var(--border-main)'
+                  }}
                 >
                   + {city}
                 </button>
@@ -112,14 +113,18 @@ export default function CareerPreferences({ formData, setFormData, onNext, onPre
                 value={newCity}
                 onChange={(e) => setNewCity(e.target.value)}
                 placeholder="Add specific city..."
-                className="flex-1 bg-[#151A24] border border-[#1E2533] rounded-lg p-2 text-white"
+                className="flex-1 rounded-lg p-2"
               />
               <button type="button" onClick={() => handleAddPreferredCity()} className="btn-outline px-3">Add</button>
             </div>
             {formData.preferredLocations.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {formData.preferredLocations.map((loc) => (
-                  <span key={loc} className="px-2.5 py-1 bg-[#3B82F6]/20 text-[#60A5FA] border border-[#3B82F6]/40 rounded-full flex items-center gap-1.5">
+                  <span
+                    key={loc}
+                    className="px-2.5 py-1 rounded-full flex items-center gap-1.5 border"
+                    style={{ background: 'var(--gold-subtle)', color: 'var(--gold-bright)', borderColor: 'var(--border-gold)' }}
+                  >
                     <span>{loc}</span>
                     <button type="button" onClick={() => handleRemovePreferredCity(loc)} className="hover:text-white font-bold">×</button>
                   </span>
@@ -131,18 +136,18 @@ export default function CareerPreferences({ formData, setFormData, onNext, onPre
       </div>
 
       {/* Highly Recommended Domain & Skills Section */}
-      <div className="p-4 bg-[#0F131D] border border-[#1E2533] rounded-xl space-y-3">
-        <h4 className="font-extrabold text-sm text-[#F59E0B] flex items-center gap-1.5">
+      <div className="p-4 rounded-xl border space-y-3" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border-main)' }}>
+        <h4 className="font-extrabold text-sm flex items-center gap-1.5" style={{ color: 'var(--gold-bright)' }}>
           <span>⭐</span>
           <span>Target Domain, Skills & Package (Highly Recommended)</span>
         </h4>
 
         <div>
-          <label className="block font-bold text-white mb-1">Primary Domain / Role</label>
+          <label className="block font-bold mb-1" style={{ color: 'var(--text-main)' }}>Primary Domain / Role</label>
           <select
             value={formData.primaryDomain}
             onChange={(e) => setFormData({ ...formData, primaryDomain: e.target.value })}
-            className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2.5 text-white focus:border-[#3B82F6]"
+            className="w-full rounded-lg p-2.5"
           >
             <option value="">Select or type target domain...</option>
             {domains.map(d => <option key={d} value={d}>{d}</option>)}
@@ -150,18 +155,19 @@ export default function CareerPreferences({ formData, setFormData, onNext, onPre
         </div>
 
         <div>
-          <label className="block font-bold text-white mb-1">Key Skills & Technologies ({formData.keySkills.length})</label>
+          <label className="block font-bold mb-1" style={{ color: 'var(--text-main)' }}>Key Skills & Technologies ({formData.keySkills.length})</label>
           <div className="flex flex-wrap gap-1.5 mb-2">
             {quickSkills.map((sk) => (
               <button
                 key={sk}
                 type="button"
                 onClick={() => handleAddSkill(sk)}
-                className={`px-2 py-0.5 rounded text-[11px] font-medium border transition ${
-                  formData.keySkills.includes(sk)
-                    ? "bg-[#10B981] text-[#0B0E14] font-bold border-[#10B981]"
-                    : "bg-[#151A24] text-[#8A99AF] border-[#1E2533] hover:text-white"
-                }`}
+                className="px-2 py-0.5 rounded text-[11px] font-medium border transition"
+                style={{
+                  background: formData.keySkills.includes(sk) ? 'var(--gold-primary)' : 'var(--bg-card)',
+                  color: formData.keySkills.includes(sk) ? '#0F0804' : 'var(--text-secondary)',
+                  borderColor: 'var(--border-main)'
+                }}
               >
                 + {sk}
               </button>
@@ -173,13 +179,17 @@ export default function CareerPreferences({ formData, setFormData, onNext, onPre
               value={newSkill}
               onChange={(e) => setNewSkill(e.target.value)}
               placeholder="Add skill (e.g. PyTorch, Redis, Kafka)..."
-              className="flex-1 bg-[#151A24] border border-[#1E2533] rounded-lg p-2 text-white"
+              className="flex-1 rounded-lg p-2"
             />
             <button type="button" onClick={() => handleAddSkill()} className="btn-outline px-3">Add Skill</button>
           </div>
           <div className="flex flex-wrap gap-1.5 mt-2">
             {formData.keySkills.map((sk) => (
-              <span key={sk} className="px-2.5 py-1 bg-[#10B981]/20 text-[#34D399] border border-[#10B981]/40 rounded-full flex items-center gap-1.5 font-semibold">
+              <span
+                key={sk}
+                className="px-2.5 py-1 rounded-full flex items-center gap-1.5 font-semibold border"
+                style={{ background: 'var(--gold-subtle)', color: 'var(--gold-bright)', borderColor: 'var(--border-gold)' }}
+              >
                 <span>{sk}</span>
                 <button type="button" onClick={() => handleRemoveSkill(sk)} className="hover:text-white font-bold">×</button>
               </span>
@@ -189,34 +199,35 @@ export default function CareerPreferences({ formData, setFormData, onNext, onPre
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block font-bold text-white mb-1">Expected Salary (Min LPA)</label>
+            <label className="block font-bold mb-1" style={{ color: 'var(--text-main)' }}>Expected Salary (Min LPA)</label>
             <input
               type="number"
               value={formData.expectedSalaryMin}
               onChange={(e) => setFormData({ ...formData, expectedSalaryMin: e.target.value })}
               placeholder="e.g. 15"
-              className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2.5 text-white"
+              className="w-full rounded-lg p-2.5"
             />
           </div>
           <div>
-            <label className="block font-bold text-white mb-1">Expected Salary (Max LPA)</label>
+            <label className="block font-bold mb-1" style={{ color: 'var(--text-main)' }}>Expected Salary (Max LPA)</label>
             <input
               type="number"
               value={formData.expectedSalaryMax}
               onChange={(e) => setFormData({ ...formData, expectedSalaryMax: e.target.value })}
               placeholder="e.g. 35"
-              className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2.5 text-white"
+              className="w-full rounded-lg p-2.5"
             />
           </div>
         </div>
       </div>
 
-      {/* Optional but Useful Fields Section */}
-      <div className="p-4 bg-[#0F131D] border border-[#1E2533] rounded-xl space-y-3">
+      {/* Optional Section */}
+      <div className="p-4 rounded-xl border space-y-3" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border-main)' }}>
         <button
           type="button"
           onClick={() => setShowOptional(!showOptional)}
-          className="w-full flex items-center justify-between text-sm font-bold text-[#8A99AF] hover:text-white transition"
+          className="w-full flex items-center justify-between text-sm font-bold transition"
+          style={{ color: 'var(--text-secondary)' }}
         >
           <span className="flex items-center gap-1.5">
             <span>⚙️</span>
@@ -226,79 +237,79 @@ export default function CareerPreferences({ formData, setFormData, onNext, onPre
         </button>
 
         {showOptional && (
-          <div className="pt-3 border-t border-[#1E2533] grid grid-cols-1 sm:grid-cols-2 gap-3 animate-fade-in">
+          <div className="pt-3 border-t grid grid-cols-1 sm:grid-cols-2 gap-3 animate-fade-in" style={{ borderColor: 'var(--border-dim)' }}>
             <div>
-              <label className="block text-white font-semibold mb-1">Phone Number</label>
+              <label className="block font-semibold mb-1" style={{ color: 'var(--text-main)' }}>Phone Number</label>
               <input
                 type="text"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder="+91 98765 43210"
-                className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2 text-white"
+                className="w-full rounded-lg p-2"
               />
             </div>
 
             <div>
-              <label className="block text-white font-semibold mb-1">LinkedIn / GitHub / Portfolio URL</label>
+              <label className="block font-semibold mb-1" style={{ color: 'var(--text-main)' }}>LinkedIn / GitHub / Portfolio URL</label>
               <input
                 type="text"
                 value={formData.portfolioUrl}
                 onChange={(e) => setFormData({ ...formData, portfolioUrl: e.target.value })}
                 placeholder="https://linkedin.com/in/yourprofile"
-                className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2 text-white"
+                className="w-full rounded-lg p-2"
               />
             </div>
 
             <div>
-              <label className="block text-white font-semibold mb-1">College / University Name</label>
+              <label className="block font-semibold mb-1" style={{ color: 'var(--text-main)' }}>College / University Name</label>
               <input
                 type="text"
                 value={formData.college}
                 onChange={(e) => setFormData({ ...formData, college: e.target.value })}
                 placeholder="e.g. IIT Delhi / NIT Trichy"
-                className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2 text-white"
+                className="w-full rounded-lg p-2"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-white font-semibold mb-1">Grad Year</label>
+                <label className="block font-semibold mb-1" style={{ color: 'var(--text-main)' }}>Grad Year</label>
                 <input
                   type="text"
                   value={formData.graduationYear}
                   onChange={(e) => setFormData({ ...formData, graduationYear: e.target.value })}
                   placeholder="e.g. 2023"
-                  className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2 text-white"
+                  className="w-full rounded-lg p-2"
                 />
               </div>
               <div>
-                <label className="block text-white font-semibold mb-1">CGPA / Score</label>
+                <label className="block font-semibold mb-1" style={{ color: 'var(--text-main)' }}>CGPA / Score</label>
                 <input
                   type="text"
                   value={formData.cgpa}
                   onChange={(e) => setFormData({ ...formData, cgpa: e.target.value })}
                   placeholder="e.g. 8.5"
-                  className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2 text-white"
+                  className="w-full rounded-lg p-2"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-white font-semibold mb-1">Years of Experience (0 for freshers)</label>
+              <label className="block font-semibold mb-1" style={{ color: 'var(--text-main)' }}>Years of Experience (0 for freshers)</label>
               <input
                 type="number"
                 value={formData.yearsOfExperience}
                 onChange={(e) => setFormData({ ...formData, yearsOfExperience: Number(e.target.value) })}
-                className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2 text-white"
+                className="w-full rounded-lg p-2"
               />
             </div>
 
             <div>
-              <label className="block text-white font-semibold mb-1">Notice Period</label>
+              <label className="block font-semibold mb-1" style={{ color: 'var(--text-main)' }}>Notice Period</label>
               <select
                 value={formData.noticePeriod}
                 onChange={(e) => setFormData({ ...formData, noticePeriod: e.target.value })}
-                className="w-full bg-[#151A24] border border-[#1E2533] rounded-lg p-2 text-white"
+                className="w-full rounded-lg p-2"
               >
                 <option value="Immediate">Immediate / Currently Serving</option>
                 <option value="15 Days">15 Days</option>
@@ -311,7 +322,7 @@ export default function CareerPreferences({ formData, setFormData, onNext, onPre
         )}
       </div>
 
-      <div className="pt-2 flex justify-between items-center border-t border-[#1E2533]">
+      <div className="pt-2 flex justify-between items-center border-t" style={{ borderColor: 'var(--border-dim)' }}>
         <button type="button" onClick={onPrev} className="btn-outline">
           ← Back
         </button>

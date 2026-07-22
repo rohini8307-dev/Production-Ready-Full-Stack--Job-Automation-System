@@ -1,16 +1,22 @@
 import React from 'react';
 
-export default function ShortlistProbabilityCard({ percentage = 72 }) {
+export default function ShortlistProbabilityCard({ percentage = 0 }) {
   return (
-    <div className="card-panel flex items-center justify-between p-4 bg-[#151A24] border border-[#1E2533] rounded-xl hover:border-[#8B5CF6]/50 transition">
+    <div
+      className="card-panel flex items-center justify-between p-4 rounded-xl transition"
+      style={{ background: 'var(--bg-card)', borderColor: 'var(--border-main)' }}
+    >
       <div className="flex items-center gap-3.5">
-        <div className="w-11 h-11 rounded-lg bg-[#8B5CF6]/10 border border-[#8B5CF6]/30 flex items-center justify-center text-[#8B5CF6] text-xl">
-          📈
+        <div
+          className="w-11 h-11 rounded-lg border flex items-center justify-center text-xl"
+          style={{ background: 'var(--gold-subtle)', borderColor: 'var(--border-gold)', color: 'var(--gold-bright)' }}
+        >
+          🎯
         </div>
         <div>
-          <div className="text-xs text-[#8A99AF] font-medium">Shortlist Probability</div>
-          <div className="text-2xl font-extrabold text-white mt-0.5">{percentage}%</div>
-          <div className="text-[11px] text-[#8A99AF] mt-0.5">Average across jobs</div>
+          <div className="text-xs font-medium" style={{ color: 'var(--text-dim)' }}>Shortlist Odds</div>
+          <div className="text-2xl font-extrabold mt-0.5" style={{ color: 'var(--text-main)' }}>{percentage}%</div>
+          <div className="text-[11px] font-semibold mt-0.5" style={{ color: 'var(--gold-bright)' }}>AI Probability</div>
         </div>
       </div>
     </div>

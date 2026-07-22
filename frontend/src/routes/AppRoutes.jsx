@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PageLayout from '../components/layout/PageLayout.jsx';
 import Dashboard from '../app/dashboard/Dashboard.jsx';
 import DiscoverJobs from '../app/discover/DiscoverJobs.jsx';
@@ -11,35 +11,64 @@ import SkillRoadmap from '../app/roadmap/SkillRoadmap.jsx';
 import Notifications from '../app/notifications/Notifications.jsx';
 import Settings from '../app/settings/Settings.jsx';
 import CareerWizard from '../app/onboarding/CareerWizard.jsx';
+import Login from '../app/auth/Login.jsx';
 import { profileStore } from '../store/profileStore.js';
 
 export default function AppRoutes() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [showWizard, setShowWizard] = useState(false);
-  // Track profile completion as React state so components re-render when it changes
   const [isProfileCompleted, setIsProfileCompleted] = useState(profileStore.isProfileCompleted);
-  // Track scrape completion to trigger dashboard refresh
   const [scrapeVersion, setScrapeVersion] = useState(0);
+
+  // Authentication session state stored in localStorage
+  const [session, setSession] = useState(() => {
+    try {
+      const saved = localStorage.getItem('noah_session');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const handleAuthSuccess = (newSession) => {
+    setSession(newSession);
+    if (newSession.name && !profileStore.fullName) {
+      profileStore.fullName = newSession.name;
+    }
+    if (newSession.email && !profileStore.email) {
+      profileStore.email = newSession.email;
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('noah_session');
+    setSession(null);
+  };
 
   const handleWizardClose = useCallback(() => {
     setShowWizard(false);
-    // Sync React state with store after wizard completes
     setIsProfileCompleted(profileStore.isProfileCompleted);
   }, []);
 
   const handleScrapeTriggered = useCallback(() => {
-    // Bump version to force child components to re-fetch data
     setScrapeVersion(v => v + 1);
   }, []);
 
+  // If no active session, present the Login view
+  if (!session) {
+    return <Login onAuthSuccess={handleAuthSuccess} />;
+  }
+
   return (
-    <div className="flex flex-col min-h-screen bg-[#0B0E14] text-white">
+    <div className="flex flex-col min-h-screen" style={{ background: 'var(--bg-main)', color: 'var(--text-main)' }}>
       <PageLayout
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenWizard={() => setShowWizard(true)}
         onScrapeTriggered={handleScrapeTriggered}
         isProfileCompleted={isProfileCompleted}
+        session={session}
+        onLogout={handleLogout}
       >
         {activeTab === "dashboard" && (
           <Dashboard
