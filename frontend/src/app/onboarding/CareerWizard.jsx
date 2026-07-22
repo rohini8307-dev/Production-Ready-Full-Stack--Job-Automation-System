@@ -3,22 +3,22 @@ import ResumeUpload from './ResumeUpload.jsx';
 import CareerPreferences from './CareerPreferences.jsx';
 import { profileStore } from '../../store/profileStore.js';
 
-export default function CareerWizard({ onClose }) {
+export default function CareerWizard({ onClose, onProfileActivated }) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    // Mandatory
+    // Mandatory - start blank so user fills in real data
     fullName: profileStore.fullName || "",
     email: profileStore.email || "",
     resumeFile: profileStore.resumeFile || null,
-    currentLocation: profileStore.currentLocation || "Bangalore, Karnataka",
+    currentLocation: profileStore.currentLocation || "",
     workMode: profileStore.workMode || "Remote",
-    preferredLocations: profileStore.preferredLocations || ["Bangalore"],
+    preferredLocations: profileStore.preferredLocations || [],
 
-    // Highly Recommended
-    primaryDomain: profileStore.primaryDomain || "Full Stack Developer",
-    keySkills: profileStore.keySkills || ["React", "TypeScript", "Node.js", "Docker", "AWS"],
-    expectedSalaryMin: profileStore.expectedSalaryMin || "18",
-    expectedSalaryMax: profileStore.expectedSalaryMax || "35",
+    // Highly Recommended - blank, auto-filled by Agent 3 after resume upload
+    primaryDomain: profileStore.primaryDomain || "",
+    keySkills: profileStore.keySkills || [],
+    expectedSalaryMin: profileStore.expectedSalaryMin || "",
+    expectedSalaryMax: profileStore.expectedSalaryMax || "",
 
     // Optional
     phone: profileStore.phone || "",
@@ -26,9 +26,9 @@ export default function CareerWizard({ onClose }) {
     college: profileStore.college || "",
     graduationYear: profileStore.graduationYear || "",
     cgpa: profileStore.cgpa || "",
-    yearsOfExperience: profileStore.yearsOfExperience || 2,
-    willingToRelocate: profileStore.willingToRelocate ?? true,
-    noticePeriod: profileStore.noticePeriod || "30 Days",
+    yearsOfExperience: profileStore.yearsOfExperience || 0,
+    willingToRelocate: profileStore.willingToRelocate ?? false,
+    noticePeriod: profileStore.noticePeriod || "Immediate",
     jobTypes: profileStore.jobTypes || ["Full-time"]
   });
 
@@ -47,7 +47,17 @@ export default function CareerWizard({ onClose }) {
   };
 
   const handleSubmitProfile = () => {
-    // Save to profileStore
+    // Validate required fields
+    if (!formData.fullName.trim() || !formData.email.trim()) {
+      alert("Full Name and Email are required.");
+      setStep(1);
+      return;
+    }
+    if (!formData.currentLocation.trim()) {
+      alert("Current Location is required. Please go back to Step 3 and enter your location.");
+      return;
+    }
+    // Save to profileStore (module-level singleton)
     Object.assign(profileStore, {
       ...formData,
       isProfileCompleted: true,
@@ -59,6 +69,8 @@ export default function CareerWizard({ onClose }) {
         missing: ["Kubernetes", "GraphQL"]
       }
     });
+    // Notify parent so React state updates and components re-render
+    if (onProfileActivated) onProfileActivated();
 
     setStep(4);
   };

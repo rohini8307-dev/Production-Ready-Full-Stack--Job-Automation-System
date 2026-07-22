@@ -3,36 +3,57 @@ import { scraperService } from '../../services/scraper.service.js';
 import { profileStore } from '../../store/profileStore.js';
 import { notificationStore } from '../../store/notificationStore.js';
 
-export default function Topbar({ onOpenWizard, onScrapeTriggered }) {
+export default function Topbar({ onOpenWizard, onScrapeTriggered, isProfileCompleted }) {
   const [search, setSearch] = useState('');
   const [isScraping, setIsScraping] = useState(false);
   const [toastMsg, setToastMsg] = useState(null);
+  const [toastType, setToastType] = useState('info'); // 'info' | 'warn' | 'error'
+
+  const showToast = (msg, type = 'info', duration = 4000) => {
+    setToastMsg(msg);
+    setToastType(type);
+    setTimeout(() => setToastMsg(null), duration);
+  };
 
   const handleStartScrape = async () => {
-    if (!profileStore.isProfileCompleted) {
-      setToastMsg("⚠️ Please complete your profile onboarding before triggering Agent 1 Discovery!");
+    // Gate: profile must be completed first
+    if (!isProfileCompleted) {
+      showToast("⚠️ Complete your profile first! Redirecting to Career Wizard...", 'warn', 5000);
       if (onOpenWizard) onOpenWizard();
-      setTimeout(() => setToastMsg(null), 5000);
       return;
     }
 
     setIsScraping(true);
-    setToastMsg(`⚡ Agent 1 Discovery initiated: Crawling platforms for ${profileStore.primaryDomain || "roles"} in ${profileStore.currentLocation || "preferences"}...`);
+    showToast(
+      `⚡ Agent 1 Discovery started — crawling for ${profileStore.primaryDomain || "roles"} in ${profileStore.currentLocation || "your locations"}...`,
+      'info',
+      10000
+    );
+
     try {
-      const res = await scraperService.runScrape(profileStore.primaryDomain || "Software Engineer", profileStore.currentLocation || "India");
-      setToastMsg(`✅ Scrape Completed! Found real-time positions for your domain.`);
+      await scraperService.runScrape(
+        profileStore.primaryDomain || "Software Engineer",
+        profileStore.currentLocation || "India"
+      );
+      showToast("✅ Discovery complete! Fresh positions are now in your dashboard.", 'success');
       if (onScrapeTriggered) onScrapeTriggered();
     } catch (e) {
-      setToastMsg("⚠️ Scrape failed. Please verify platform connectivity or API endpoints.");
+      showToast("❌ Scrape failed — check backend connectivity.", 'error');
     } finally {
       setIsScraping(false);
-      setTimeout(() => setToastMsg(null), 4000);
     }
   };
 
+  const toastBorderColor = {
+    info: '#3B82F6',
+    warn: '#F59E0B',
+    success: '#10B981',
+    error: '#EF4444'
+  }[toastType] || '#3B82F6';
+
   return (
     <header className="h-16 bg-[#0F131D] border-b border-[#1E2533] px-6 flex items-center justify-between sticky top-0 z-40 w-full">
-      {/* Search Bar */}
+      {/* Search */}
       <div className="flex items-center max-w-sm w-full relative mr-4">
         <span className="absolute left-3 text-[#5D6A80] text-xs">🔍</span>
         <input
@@ -47,30 +68,48 @@ export default function Topbar({ onOpenWizard, onScrapeTriggered }) {
         </span>
       </div>
 
-      {/* Action Buttons & Profile */}
-      <div className="flex items-center gap-4">
+      {/* Actions */}
+      <div className="flex items-center gap-3">
+        {/* Toast */}
         {toastMsg && (
-          <div className="bg-[#1C2230] border border-[#F59E0B] text-white px-3 py-1.5 rounded-lg text-xs font-medium animate-fade-in shadow-lg">
+          <div
+            className="bg-[#1C2230] text-white px-3 py-1.5 rounded-lg text-xs font-medium shadow-lg animate-fade-in border max-w-xs"
+            style={{ borderColor: toastBorderColor }}
+          >
             {toastMsg}
           </div>
         )}
 
+        {/* Start New Scrape Button */}
         <button
+          id="start-scrape-btn"
           onClick={handleStartScrape}
           disabled={isScraping}
-          className="btn-gold shadow-lg shadow-amber-500/10 hover:shadow-amber-500/25 disabled:opacity-50"
+          title={!isProfileCompleted ? "Complete profile onboarding first" : "Trigger Agent 1 Discovery"}
+          className={`btn-gold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition ${
+            !isProfileCompleted ? 'opacity-75' : 'shadow-amber-500/20 hover:shadow-amber-500/30'
+          }`}
         >
           <span>⚡</span>
           <span>{isScraping ? "Scraping..." : "Start New Scrape"}</span>
+          {!isProfileCompleted && (
+            <span className="ml-1 text-[10px] bg-amber-900/60 px-1.5 py-0.5 rounded font-normal">Profile needed</span>
+          )}
         </button>
 
+        {/* Career Wizard Button */}
         <button
+          id="career-wizard-btn"
           onClick={onOpenWizard}
           className="bg-[#1C2230] hover:bg-[#252D3D] text-[#60A5FA] border border-[#3B82F6]/30 px-3 py-1.5 rounded-lg text-xs font-semibold transition"
         >
           🪄 Career Wizard
+          {isProfileCompleted && (
+            <span className="ml-1 text-[#10B981] text-[10px]">✓</span>
+          )}
         </button>
 
+        {/* Notifications Bell */}
         <div className="relative cursor-pointer w-9 h-9 rounded-lg bg-[#151A24] border border-[#1E2533] flex items-center justify-center hover:bg-[#1C2230] transition">
           <span className="text-base">🔔</span>
           {notificationStore.unreadCount > 0 && (
@@ -80,21 +119,29 @@ export default function Topbar({ onOpenWizard, onScrapeTriggered }) {
           )}
         </div>
 
+        {/* User Profile */}
         <div className="flex items-center gap-3 pl-2 border-l border-[#1E2533]">
           <div className="text-right hidden md:block">
             <div className="text-sm font-semibold text-white leading-tight">
-              {profileStore.fullName || "Guest User"}
+              {isProfileCompleted && profileStore.fullName ? profileStore.fullName : "Guest User"}
             </div>
             <div className="text-xs text-[#8A99AF]">
-              {profileStore.email || "No profile active"}
+              {isProfileCompleted && profileStore.email ? profileStore.email : "No profile — complete onboarding"}
             </div>
           </div>
-          <div className="w-9 h-9 rounded-full bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white font-extrabold flex items-center justify-center text-sm shadow-md">
-            {profileStore.fullName ? profileStore.fullName.slice(0, 2).toUpperCase() : "👤"}
+          <div
+            className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-extrabold shadow-md ${
+              isProfileCompleted
+                ? 'bg-gradient-to-r from-[#3B82F6] to-[#2563EB] text-white'
+                : 'bg-[#1C2230] border border-[#1E2533] text-[#8A99AF]'
+            }`}
+          >
+            {isProfileCompleted && profileStore.fullName
+              ? profileStore.fullName.slice(0, 2).toUpperCase()
+              : "?"}
           </div>
         </div>
       </div>
     </header>
   );
 }
-

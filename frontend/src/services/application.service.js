@@ -6,7 +6,7 @@ export const applicationService = {
       const res = await fetch(`${BASE_URL}/api/applications/tracker`);
       return await res.json();
     } catch (e) {
-      return { total_applied: 24, pipeline: { Applied: 24, Screening: 18, Assessment: 6, Interview: 3, Offer: 1 } };
+      return { total_applied: 0, pipeline: { Applied: 0, Screening: 0, Assessment: 0, Interview: 0, Offer: 0, Rejected: 0 }, recent_applications: [] };
     }
   },
   async autoApply(jobIds, priorityLevel) {
