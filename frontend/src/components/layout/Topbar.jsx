@@ -109,17 +109,7 @@ export default function Topbar({ onOpenWizard, onScrapeTriggered, isProfileCompl
           )}
         </button>
 
-        {/* Career Wizard Button */}
-        <button
-          id="career-wizard-btn"
-          onClick={onOpenWizard}
-          className="btn-outline"
-        >
-          🪄 Career Wizard
-          {isProfileCompleted && (
-            <span className="ml-1" style={{ color: 'var(--gold-bright)' }}>✓</span>
-          )}
-        </button>
+
 
         {/* Notifications */}
         <div

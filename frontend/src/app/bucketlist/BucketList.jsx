@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BucketCard from '../../components/bucketlist/BucketCard.jsx';
 import AutoApplyButton from '../../components/applications/AutoApplyButton.jsx';
 
 export default function BucketList() {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleRemove = (id) => {
+  useEffect(() => {
+    let mounted = true;
+    import('../../services/application.service.js').then(({ applicationService }) => {
+      applicationService.getBucketList().then(res => {
+        if (mounted) {
+          setItems(res?.jobs || []);
+          setLoading(false);
+        }
+      });
+    });
+    return () => { mounted = false; };
+  }, []);
+
+  const handleRemove = async (id) => {
+    const { applicationService } = await import('../../services/application.service.js');
+    await applicationService.removeFromBucket(id);
     setItems(items.filter(i => i.id !== id));
   };
 

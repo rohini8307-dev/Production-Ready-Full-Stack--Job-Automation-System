@@ -44,15 +44,7 @@ export default function Login({ onAuthSuccess }) {
       localStorage.setItem('noah_session', JSON.stringify(session));
       onAuthSuccess(session);
     } catch (err) {
-      // Network error — allow offline login for dev
-      const session = {
-        email: form.email,
-        name: form.name || form.email.split('@')[0],
-        token: 'dev_session',
-        loginTime: Date.now()
-      };
-      localStorage.setItem('noah_session', JSON.stringify(session));
-      onAuthSuccess(session);
+      setError('Network error or server unavailable. Please try again.');
     } finally {
       setLoading(false);
     }

@@ -16,16 +16,11 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     { id: 'settings', label: 'Settings', icon: '⚙️' },
   ];
 
-  const agents = [
-    { name: 'Agent 1 Discovery', status: 'Active', color: 'bg-[#C8941F]' },
-    { name: 'Agent 2 Intelligence', status: 'Active', color: 'bg-[#C8941F]' },
-    { name: 'Agent 3 Student Intel', status: 'Ready', color: 'bg-[#9B6840]' },
-    { name: 'Agent 4 Matching', status: 'Active', color: 'bg-[#C8941F]' },
-  ];
+
 
   return (
     <aside
-      className="w-64 flex flex-col justify-between p-4 flex-shrink-0 h-screen sticky top-0 border-r"
+      className="w-64 hidden md:flex flex-col justify-between p-4 flex-shrink-0 h-screen sticky top-0 border-r"
       style={{ background: 'var(--bg-sidebar)', borderColor: 'var(--border-main)' }}
     >
       <div>
@@ -34,7 +29,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
             className="w-9 h-9 rounded-lg flex items-center justify-center font-black text-xl shadow-lg"
             style={{
               background: 'linear-gradient(135deg, var(--gold-primary), var(--gold-deep))',
-              color: '#0F0804',
+              color: '#FFFFFF',
               boxShadow: '0 4px 14px var(--gold-glow)'
             }}
           >
@@ -58,7 +53,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-                  isActive ? 'sidebar-active' : 'hover:bg-[#1A0F08]'
+                  isActive ? 'sidebar-active' : 'hover:bg-gray-200'
                 }`}
                 style={{
                   color: isActive ? 'var(--gold-bright)' : 'var(--text-secondary)'
@@ -82,40 +77,6 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         </nav>
       </div>
 
-      <div className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--border-dim)' }}>
-        <div className="text-[11px] font-bold tracking-wider uppercase mb-2 px-2" style={{ color: 'var(--text-dim)' }}>
-          AGENT SYSTEM STATUS
-        </div>
-        <div className="space-y-2 mb-4 px-2">
-          {agents.map((ag) => (
-            <div key={ag.name} className="flex items-center justify-between text-xs" style={{ color: 'var(--text-secondary)' }}>
-              <span>{ag.name}</span>
-              <div className="flex items-center gap-1.5">
-                <span className={`w-2 h-2 rounded-full ${ag.color} animate-pulse`} />
-                <span style={{ color: 'var(--text-gold)', fontWeight: 600 }}>
-                  {ag.status}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <button
-          onClick={() => setActiveTab('analytics')}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition border"
-          style={{
-            background: 'var(--bg-card)',
-            borderColor: 'var(--border-main)',
-            color: 'var(--text-secondary)'
-          }}
-        >
-          <div className="flex items-center gap-2">
-            <span>💻</span>
-            <span>System Logs</span>
-          </div>
-          <span>›</span>
-        </button>
-      </div>
     </aside>
   );
 }

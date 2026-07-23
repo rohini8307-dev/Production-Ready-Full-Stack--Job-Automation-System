@@ -119,7 +119,7 @@ export default function Dashboard({ onOpenWizard, isProfileCompleted, scrapeVers
                 onClick={onOpenWizard}
                 className="btn-primary text-xs px-5 py-2.5 shadow-lg"
               >
-                🪄 Start Career Wizard & Setup Profile →
+                🪄 Setup Profile & Start New Scrape →
               </button>
             </div>
           ) : filteredJobs.length === 0 ? (

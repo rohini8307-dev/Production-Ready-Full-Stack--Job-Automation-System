@@ -6,41 +6,41 @@
 
 /* ─── BROWN & GOLD DESIGN SYSTEM ──────────────────────────────────── */
 :root {
-  /* Backgrounds - Deep Brown Palette */
-  --bg-deep:        #080503;   /* deepest — base */
-  --bg-main:        #0F0804;   /* main app background */
-  --bg-sidebar:     #0C0603;   /* sidebar */
-  --bg-card:        #1A0F08;   /* card surface */
-  --bg-elevated:    #221308;   /* raised elements */
-  --bg-hover:       #2C1A0C;   /* hover state */
+  /* Backgrounds - Light Theme */
+  --bg-deep:        #F9FAFB;   /* deepest — base */
+  --bg-main:        #FFFFFF;   /* main app background */
+  --bg-sidebar:     #F3F4F6;   /* sidebar */
+  --bg-card:        #FFFFFF;   /* card surface */
+  --bg-elevated:    #F9FAFB;   /* raised elements */
+  --bg-hover:       #F3F4F6;   /* hover state */
 
   /* Borders */
-  --border-dim:     #2E1A0E;   /* subtle borders */
-  --border-main:    #3D2210;   /* normal borders */
-  --border-gold:    #7A5A1A;   /* gold-tinted borders */
+  --border-dim:     #E5E7EB;   /* subtle borders */
+  --border-main:    #D1D5DB;   /* normal borders */
+  --border-gold:    #D91656;   /* maroon borders */
 
-  /* Gold Accent Palette */
-  --gold-primary:   #C8941F;   /* main gold */
-  --gold-bright:    #E8B84B;   /* bright highlight gold */
-  --gold-deep:      #8B6618;   /* deep/muted gold */
-  --gold-glow:      rgba(200,148,31,0.18);
-  --gold-subtle:    rgba(200,148,31,0.08);
+  /* Gold -> Neon Maroon / Brown Accent Palette */
+  --gold-primary:   #D91656;   /* main maroon */
+  --gold-bright:    #FF2052;   /* bright maroon */
+  --gold-deep:      #800000;   /* deep maroon */
+  --gold-glow:      rgba(217, 22, 86, 0.18);
+  --gold-subtle:    rgba(217, 22, 86, 0.08);
 
   /* Brown Accents */
-  --brown-mid:      #6B3D20;   /* mid-range brown accent */
-  --brown-light:    #9B6840;   /* lighter brown */
+  --brown-mid:      #E07A5F;   /* neon brown/orange */
+  --brown-light:    #F4A261;   /* lighter brown */
 
   /* Text */
-  --text-main:      #F5EDD8;   /* warm white */
-  --text-secondary: #C4A882;   /* warm tan */
-  --text-dim:       #8A7060;   /* dimmed text */
-  --text-gold:      #E8B84B;   /* gold text */
+  --text-main:      #111827;   /* dark gray/black */
+  --text-secondary: #4B5563;   /* medium gray */
+  --text-dim:       #6B7280;   /* dimmed gray */
+  --text-gold:      #D91656;   /* maroon text */
 
-  /* Status using gold-brown tones */
-  --status-success: #B8860B;   /* dark goldenrod */
-  --status-warn:    #C9781A;   /* amber-brown */
-  --status-error:   #8B3A1A;   /* deep red-brown */
-  --status-info:    #7A5A1A;   /* info gold */
+  /* Status using brown/maroon tones */
+  --status-success: #10B981;   /* green */
+  --status-warn:    #E07A5F;   /* brown */
+  --status-error:   #D91656;   /* maroon */
+  --status-info:    #3B82F6;   /* blue */
 }
 
 /* ─── RESET ─────────────────────────────────────────────────────── */
@@ -76,7 +76,7 @@ body {
 /* ─── BUTTONS ────────────────────────────────────────────────────── */
 .btn-primary {
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-deep));
-  color: #0F0804;
+  color: #FFFFFF;
   border: none;
   border-radius: 8px;
   padding: 8px 18px;
@@ -94,8 +94,8 @@ body {
 }
 
 .btn-gold {
-  background: linear-gradient(135deg, var(--gold-primary), #A0780E);
-  color: #0F0804;
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-deep));
+  color: #FFFFFF;
   border: none;
   border-radius: 8px;
   padding: 8px 18px;

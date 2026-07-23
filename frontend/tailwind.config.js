@@ -7,13 +7,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        'bg-main': '#0B0E14',
-        'bg-sidebar': '#0F131D',
-        'bg-card': '#151A24',
-        'bg-card-hover': '#1C2230',
-        'border-color': '#1E2533',
-        'primary-blue': '#3B82F6',
-        'accent-gold': '#F59E0B',
+        'bg-main': '#FFFFFF',
+        'bg-sidebar': '#F3F4F6',
+        'bg-card': '#FFFFFF',
+        'bg-card-hover': '#F9FAFB',
+        'border-color': '#E5E7EB',
+        'primary-maroon': '#D91656',
+        'accent-brown': '#E07A5F',
         'accent-green': '#10B981',
       }
     },

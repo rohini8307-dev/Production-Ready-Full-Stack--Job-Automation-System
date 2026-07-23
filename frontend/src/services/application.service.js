@@ -28,5 +28,21 @@ export const applicationService = {
     } catch (e) {
       return { status: "added" };
     }
+  },
+  async getBucketList() {
+    try {
+      const res = await fetch(`${BASE_URL}/api/applications/bucket-list`);
+      return await res.json();
+    } catch (e) {
+      return { total: 0, jobs: [] };
+    }
+  },
+  async removeFromBucket(jobId) {
+    try {
+      const res = await fetch(`${BASE_URL}/api/applications/bucket-list/remove/${jobId}`, { method: "DELETE" });
+      return await res.json();
+    } catch (e) {
+      return { status: "removed" };
+    }
   }
 };

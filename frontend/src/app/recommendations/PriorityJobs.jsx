@@ -42,7 +42,7 @@ export default function PriorityJobs({ isProfileCompleted, scrapeVersion = 0 }) 
           <div className="text-3xl">🎯</div>
           <h3 className="text-sm font-bold text-white">Profile Onboarding Required</h3>
           <p className="text-xs text-[#8A99AF]">
-            Complete your profile using the 🪄 Career Wizard to activate AI-matched priority recommendations.
+            Complete your profile using Setup Profile to activate AI-matched priority recommendations.
           </p>
         </div>
       ) : loading ? (

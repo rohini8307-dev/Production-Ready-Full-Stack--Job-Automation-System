@@ -6,6 +6,18 @@ export default function JobCard({ job, onBookmarkToggle }) {
   const [showExplain, setShowExplain] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [toast, setToast] = useState(null);
+  const [isApplied, setIsApplied] = useState(false);
+
+  React.useEffect(() => {
+    let mounted = true;
+    applicationService.getApplications().then(res => {
+      if (mounted && res?.recent_applications) {
+        const applied = res.recent_applications.some(app => app.job?.id === job.id);
+        setIsApplied(applied);
+      }
+    });
+    return () => { mounted = false; };
+  }, [job.id]);
 
   const priorityBadge = {
     "Priority 1": { text: "P1", class: "badge-p1" },
@@ -58,12 +70,16 @@ export default function JobCard({ job, onBookmarkToggle }) {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2.5 flex-wrap">
-            <h3
-              className="text-base font-bold transition hover:opacity-80"
+            <a
+              href={job.url || `https://www.google.com/search?q=${encodeURIComponent(job.title + ' ' + job.company + ' careers')}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-base font-bold transition hover:underline"
               style={{ color: 'var(--text-main)' }}
+              title="View Official Job Posting"
             >
-              {job.title}
-            </h3>
+              {job.title} <span className="text-[10px] opacity-70">↗</span>
+            </a>
             <span className="badge-platform">{job.platform || "Indeed"}</span>
             <span className="text-xs" style={{ color: 'var(--text-dim)' }}>{job.posted_time || "Posted 2h ago"}</span>
             {job.is_new && (
@@ -88,23 +104,14 @@ export default function JobCard({ job, onBookmarkToggle }) {
             <span className={job.work_mode === 'Remote' ? 'badge-remote' : 'badge-onsite'}>
               {job.work_mode || "On-site"}
             </span>
+            {isApplied && (
+              <span className="badge-p1 !bg-green-100 !text-green-700 !border-green-300">
+                ✅ Applied
+              </span>
+            )}
           </div>
 
-          {/* Applicants Progress bar */}
-          <div className="mt-3 flex items-center gap-3">
-            <div className="w-40 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--bg-elevated)' }}>
-              <div
-                className="h-full rounded-full"
-                style={{
-                  width: `${Math.min(100, ((job.applicants_count || 30) / (job.total_openings || 200)) * 100)}%`,
-                  background: 'linear-gradient(90deg, var(--gold-deep), var(--gold-bright))'
-                }}
-              />
-            </div>
-            <span className="text-[11px] font-medium" style={{ color: 'var(--text-dim)' }}>
-              <strong style={{ color: 'var(--text-main)' }}>{job.applicants_count || 30}</strong> / {job.total_openings || 200} Applied
-            </span>
-          </div>
+
 
           {/* Skills pills */}
           <div className="mt-3 flex flex-wrap gap-1.5">

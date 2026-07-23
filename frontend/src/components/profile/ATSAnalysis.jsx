@@ -17,11 +17,11 @@ export default function ATSAnalysis({ summary }) {
       >
         {details ? "Hide Suggestions" : "View ATS Keyword Improvements →"}
       </button>
-      {details && (
+      {details && summary?.suggestions && summary.suggestions.length > 0 && (
         <div className="mt-3 p-3 bg-[#0F131D] rounded-lg text-xs space-y-1.5 text-gray-300">
-          <div>• Add explicit mentions of <strong>Docker</strong> in project descriptions.</div>
-          <div>• Include <strong>AWS CloudWatch</strong> or <strong>Grafana</strong> monitoring metrics.</div>
-          <div>• Highlight REST API throughput metrics under Backend experience.</div>
+          {summary.suggestions.map((s, idx) => (
+            <div key={idx}>• {s}</div>
+          ))}
         </div>
       )}
     </div>
