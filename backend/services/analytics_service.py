@@ -9,8 +9,8 @@ class AnalyticsService:
         total_jobs = len(JOBS_STORE)
         total_applied = len(applied_store)
         return {
-            "resume_score": 0 if total_jobs == 0 else USER_PROFILE.get("resume_score", 84),
-            "ats_score": 0 if total_jobs == 0 else USER_PROFILE.get("ats_score", 80),
+            "resume_score": USER_PROFILE.get("resume_score", 84),
+            "ats_score": USER_PROFILE.get("ats_score", 80),
             "active_recommendations": total_jobs,
             "recommendations_change": f"+{total_jobs} discovered" if total_jobs > 0 else "0 new",
             "shortlist_probability": 0 if total_jobs == 0 else 82,

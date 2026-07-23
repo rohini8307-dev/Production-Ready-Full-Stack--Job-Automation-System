@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ExplainMatch from './ExplainMatch.jsx';
 import { applicationService } from '../../services/application.service.js';
 
-export default function JobCard({ job, onBookmarkToggle }) {
+export default function JobCard({ job, onBookmarkToggle, bucketListMode, onRemove }) {
   const [showExplain, setShowExplain] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [toast, setToast] = useState(null);
@@ -159,18 +159,28 @@ export default function JobCard({ job, onBookmarkToggle }) {
           >
             View Details
           </button>
-          <button
-            onClick={handleBookmark}
-            className="p-2 rounded-lg border transition"
-            style={{
-              background: isBookmarked ? 'var(--gold-subtle)' : 'var(--bg-elevated)',
-              borderColor: isBookmarked ? 'var(--gold-primary)' : 'var(--border-main)',
-              color: isBookmarked ? 'var(--gold-bright)' : 'var(--text-dim)'
-            }}
-            title="Add to Bucket List"
-          >
-            {isBookmarked ? "🛍️" : "📑"}
-          </button>
+          {bucketListMode ? (
+            <button
+              onClick={() => onRemove && onRemove(job.id)}
+              className="px-3 py-1 bg-[#EF4444]/20 text-[#EF4444] rounded text-xs font-semibold hover:bg-[#EF4444]/30 transition"
+              title="Remove from Bucket List"
+            >
+              Remove
+            </button>
+          ) : (
+            <button
+              onClick={handleBookmark}
+              className="p-2 rounded-lg border transition"
+              style={{
+                background: isBookmarked ? 'var(--gold-subtle)' : 'var(--bg-elevated)',
+                borderColor: isBookmarked ? 'var(--gold-primary)' : 'var(--border-main)',
+                color: isBookmarked ? 'var(--gold-bright)' : 'var(--text-dim)'
+              }}
+              title="Add to Bucket List"
+            >
+              {isBookmarked ? "🛍️" : "📑"}
+            </button>
+          )}
         </div>
       </div>
 

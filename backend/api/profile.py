@@ -114,29 +114,56 @@ async def query_ollama(prompt: str) -> str:
 
 @router.post("/analyze-resume")
 async def analyze_resume(file: UploadFile = File(None), resume_text: str = Form(None)):
-    resume_content = await extract_text_from_upload(file, resume_text)
+    resume_content = ""
+    temp_path = None
     
-    prompt = f"""Analyze this resume and provide exactly 3 bullet points on how to improve its ATS compatibility. Use short 1-sentence bullet points without markdown bolding. Also provide an ATS score out of 100 on the very first line as a standalone number (e.g. '85').\n\nResume:\n{resume_content}"""
+    # Custom extraction to keep the file path for the scraper
+    if file and file.filename:
+        if not PdfReader:
+            raise HTTPException(status_code=500, detail="pypdf is not installed. Please run 'pip install pypdf'")
+        try:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
+                content = await file.read()
+                temp_file.write(content)
+                temp_path = temp_file.name
+            
+            reader = PdfReader(temp_path)
+            for page in reader.pages:
+                resume_content += page.extract_text() + "\n"
+            resume_content = resume_content.strip()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to read PDF: {str(e)}")
+    else:
+        resume_content = resume_text if resume_text else "A Full Stack Developer resume with React, Python, Docker and AWS experience."
+    
+    prompt = f"""Analyze this resume and provide exactly 3 bullet points on how to improve its ATS compatibility. Use short 1-sentence bullet points without markdown bolding.\n\nResume:\n{resume_content}"""
     
     clean_text = await query_ollama(prompt)
     text_out = clean_text.strip().split('\n')
     
-    # Parse output
-    score = 80
+    # Parse suggestions
     suggestions = []
     for line in text_out:
         line = line.strip()
         if not line: continue
-        if "score" in line.lower() or line.isdigit():
-            try:
-                match = re.search(r'\b(\d{2,3})\b', line)
-                if match: score = min(100, int(match.group(1)))
-            except: pass
-        elif line.startswith('-') or line.startswith('*') or line.startswith('•'):
+        if line.startswith('-') or line.startswith('*') or line.startswith('•'):
             suggestions.append(line.lstrip('-*• ').strip())
     
     if not suggestions:
         suggestions = [s for s in text_out if s and len(s) > 10][:3]
+        
+    # Get the ATS score from AutoApplyMax using Playwright
+    score = 80
+    if temp_path:
+        from backend.services.autoapplymax_scraper import get_ats_score_from_autoapplymax
+        score = await get_ats_score_from_autoapplymax(temp_path)
+        
+        # Clean up the temp file
+        import os
+        try:
+            os.remove(temp_path)
+        except:
+            pass
         
     global USER_PROFILE
     USER_PROFILE["ats_score"] = score

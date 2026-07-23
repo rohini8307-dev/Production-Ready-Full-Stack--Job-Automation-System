@@ -82,7 +82,7 @@ export default function ExplainMatch({ job, onClose }) {
                 disabled={applied}
                 className="btn-gold px-5 py-2"
               >
-                {applied ? "✅ Applied via NOAH!" : "⚡ Apply Now via Agent 4"}
+                {applied ? "✅ Applied via NOAH!" : "⚡ Apply"}
               </button>
             </div>
           </div>

@@ -134,9 +134,42 @@ export default function ResumeProfile() {
                     if (window.jspdf) {
                       const { jsPDF } = window.jspdf;
                       const doc = new jsPDF();
-                      doc.setFontSize(12);
-                      const splitText = doc.splitTextToSize(aiResult, 180);
-                      doc.text(splitText, 15, 20);
+                      
+                      // Template Header
+                      doc.setFont('helvetica', 'bold');
+                      doc.setFontSize(22);
+                      doc.text(profileStore.fullName || "Your Name", 105, 20, { align: 'center' });
+                      
+                      // Template Subheader (Contact Info)
+                      doc.setFontSize(11);
+                      doc.setFont('helvetica', 'normal');
+                      const subHeader = `${profileStore.email || "email@example.com"} | ${profileStore.currentLocation || "Location"} | ${profileStore.primaryDomain || "Domain"}`;
+                      doc.text(subHeader, 105, 28, { align: 'center' });
+                      
+                      // Template Divider Line
+                      doc.setLineWidth(0.5);
+                      doc.line(20, 32, 190, 32);
+
+                      // Enhanced Resume Content
+                      doc.setFontSize(11);
+                      const splitText = doc.splitTextToSize(aiResult, 170);
+                      let y = 42;
+                      for (let i = 0; i < splitText.length; i++) {
+                        if (y > 280) {
+                          doc.addPage();
+                          y = 20;
+                        }
+                        // Simple bolding check for markdown if AI outputs some basic markdown headings
+                        if (splitText[i].startsWith('#') || splitText[i].includes('**')) {
+                          doc.setFont('helvetica', 'bold');
+                          let cleanText = splitText[i].replace(/#/g, '').replace(/\*\*/g, '').trim();
+                          doc.text(cleanText, 20, y);
+                          doc.setFont('helvetica', 'normal');
+                        } else {
+                          doc.text(splitText[i], 20, y);
+                        }
+                        y += 5.5;
+                      }
                       doc.save('Enhanced_Resume_ATS.pdf');
                     } else {
                       alert("PDF library is still loading, please try again in a moment!");

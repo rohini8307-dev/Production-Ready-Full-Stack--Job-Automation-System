@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import BucketCard from '../../components/bucketlist/BucketCard.jsx';
+import JobCard from '../../components/recommendations/JobCard.jsx';
 import AutoApplyButton from '../../components/applications/AutoApplyButton.jsx';
 
 export default function BucketList() {
@@ -40,7 +40,7 @@ export default function BucketList() {
         </div>
       ) : (
         items.map(item => (
-          <BucketCard key={item.id} job={item} onRemove={handleRemove} />
+          <JobCard key={item.id} job={item} bucketListMode={true} onRemove={handleRemove} />
         ))
       )}
     </div>
